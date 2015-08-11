@@ -1,0 +1,59 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/title_config_graph">
+
+        <EditTextPreference
+            android:key="graph_muestas"
+            android:title="Muestras"
+            android:dialogTitle="Muestras"
+            android:inputType="number"
+            android:defaultValue="100"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="graph_ventana"
+            android:title="Ventana"
+            android:dialogTitle="Ventana"
+            android:inputType="number"
+            android:defaultValue="100"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="graph_max_ecg"
+            android:title="Max ECG"
+            android:dialogTitle="Max ECG"
+            android:inputType="number"
+            android:defaultValue="100"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="graph_min_ecg"
+            android:title="Min ECG"
+            android:dialogTitle="Min ECG"
+            android:inputType="number"
+            android:defaultValue="100"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="graph_max_pres"
+            android:title="Max Presion"
+            android:dialogTitle="Max Presion"
+            android:inputType="number"
+            android:defaultValue="100"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="graph_min_presion"
+            android:title="Min Presion"
+            android:dialogTitle="Min Presion"
+            android:inputType="number"
+            android:defaultValue="100"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

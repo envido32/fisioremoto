@@ -1,0 +1,90 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/title_config_new_medical">
+
+        <EditTextPreference
+            android:key="new_height"
+            android:title="Height"
+            android:dialogTitle="Height"
+            android:inputType="number"
+            android:hint="175"
+            android:summary="%s cm."
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="new_weight"
+            android:title="Weight"
+            android:dialogTitle="Weight"
+            android:inputType="number"
+            android:hint="70"
+            android:summary="%s Kg."
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="new_pres_max"
+            android:title="Sistolic Pressure"
+            android:dialogTitle="Sistolic Pressure"
+            android:inputType="number"
+            android:hint="120"
+            android:summary="%s mmHg."
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="new_pres_min"
+            android:title="Diastolic Pressure"
+            android:dialogTitle="Diastolic Pressure"
+            android:inputType="number"
+            android:hint="80"
+            android:summary="%s mmHg."
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+
+        <EditTextPreference
+            android:key="new_deltax"
+            android:title="Delta X"
+            android:dialogTitle="Delta X"
+            android:inputType="number"
+            android:hint="1,5"
+            android:summary="%s"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText" />
+        
+        <CheckBoxPreference
+            android:key="colesterol"
+            android:title="Posee alto colesterol"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="presion"
+            android:title="Tratamiento de presion"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="diabetes"
+            android:title="Tratamiento de diabetes"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="artritis"
+            android:title="Sufre de artritis rematoidea"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="rinon"
+            android:title="Enfermedad crónica de riñon"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="fibrilacion"
+            android:title="Sufre de fibrilacion "
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="familiar"
+            android:title="Historial familiar en enfermedad cardiovascular"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
