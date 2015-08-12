@@ -1,10 +1,7 @@
 package ar.edu.frba.utn.gibio.fisioremoto;
 
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +21,8 @@ public class NewPersonActivity extends AppCompatActivity {
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = sharedPref.edit();
+        //PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_job").commit();
+        //PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_sex").commit();
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new NewPersonPreferenceFragment()).commit();
 
@@ -31,18 +30,18 @@ public class NewPersonActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public static class NewPersonPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
+    public static class NewPersonPreferenceFragment extends PreferenceFragment
+        //implements SharedPreferences.OnSharedPreferenceChangeListener
     {
-        private static final String KEY_EDIT_TEXT_PREFERENCE = "new_height";
+        //private static final String KEY_EDIT_TEXT_PREFERENCE = "new_name";
 
         @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
+        public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.new_person);
-            addPreferencesFromResource(R.xml.new_medical);
+            //addPreferencesFromResource(R.xml.new_person);
+            //addPreferencesFromResource(R.xml.new_medical);
         }
-
+/*
         @Override
         public void onResume(){
             super.onResume();
@@ -76,6 +75,7 @@ public class NewPersonActivity extends AppCompatActivity {
                 }
             }
         }
+        */
     }
 
     @Override
@@ -107,7 +107,6 @@ public class NewPersonActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         prefEditor.putString("new_name", "");
         prefEditor.putString("new_email", "");
         prefEditor.putInt("new_sex", 0);
@@ -128,7 +127,6 @@ public class NewPersonActivity extends AppCompatActivity {
         prefEditor.putBoolean("rinon", false);
         prefEditor.putBoolean("fibrilacion", false);
         prefEditor.putBoolean("familiar", false);
-
         prefEditor.apply();
     }
 }
