@@ -33,7 +33,7 @@ public class NewPersonActivity extends AppCompatActivity {
 
     public static class NewPersonPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
     {
-        private static final String KEY_EDIT_TEXT_PREFERENCE = "name";
+        private static final String KEY_EDIT_TEXT_PREFERENCE = "new_height";
 
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -57,6 +57,7 @@ public class NewPersonActivity extends AppCompatActivity {
             getPreferenceScreen().getSharedPreferences().
                     unregisterOnSharedPreferenceChangeListener(this);
         }
+
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             updatePreference(key);
@@ -66,11 +67,11 @@ public class NewPersonActivity extends AppCompatActivity {
             if (key.equals(KEY_EDIT_TEXT_PREFERENCE)){
                 Preference preference = findPreference(key);
                 if (preference instanceof EditTextPreference){
-                    EditTextPreference editTextPreference =  (EditTextPreference)preference;
+                    EditTextPreference editTextPreference = (EditTextPreference)preference;
                     if (editTextPreference.getText().trim().length() > 0){
-                        editTextPreference.setSummary("Entered Name is  " + editTextPreference.getText());
+                        editTextPreference.setSummary("Entered name is: " + editTextPreference.getText());
                     }else{
-                        editTextPreference.setSummary("Enter Your Name");
+                        editTextPreference.setSummary("Enter patient name.");
                     }
                 }
             }
@@ -90,19 +91,44 @@ public class NewPersonActivity extends AppCompatActivity {
 
         switch (id) {
             case android.R.id.home: {
-            }
-            break;
+            } break;
+
             case R.id.menu_save: {
                 new_profile_name = sharedPref.getString("new_name", "No Name");
                 Toast.makeText(getApplicationContext()
                         , "New profile created: " + new_profile_name
                         , Toast.LENGTH_SHORT).show();
-            }
-            break;
+            } break;
         }
-        prefEditor.putString("new_name","");
-        prefEditor.apply();
         this.finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        prefEditor.putString("new_name", "");
+        prefEditor.putString("new_email", "");
+        prefEditor.putInt("new_sex", 0);
+        prefEditor.putString("new_birthdate", "");
+        prefEditor.putString("new_birth_place", "");
+        prefEditor.putString("new_birth_place2", "");
+        prefEditor.putString("new_birth_city", "");
+        prefEditor.putInt("new_job", 0);
+        prefEditor.putString("new_height", "");
+        prefEditor.putString("new_weight", "");
+        prefEditor.putString("new_pres_max", "");
+        prefEditor.putString("new_pres_min", "");
+        prefEditor.putString("new_deltax", "");
+        prefEditor.putBoolean("colesterol", false);
+        prefEditor.putBoolean("presion", false);
+        prefEditor.putBoolean("diabetes", false);
+        prefEditor.putBoolean("artritis", false);
+        prefEditor.putBoolean("rinon", false);
+        prefEditor.putBoolean("fibrilacion", false);
+        prefEditor.putBoolean("familiar", false);
+
+        prefEditor.apply();
     }
 }
