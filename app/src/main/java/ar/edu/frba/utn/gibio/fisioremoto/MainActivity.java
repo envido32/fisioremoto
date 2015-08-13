@@ -95,10 +95,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void addDrawerItems() {
         String[] PatientArray = {
+                "Neptuno",
+                "Urano",
                 "Saturno",
                 "Jupiter",
                 "Marte",
-                "Venus"};
+                "Venus",
+                "Mercurio"
+        };
+
         mDrawerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, PatientArray);
         mDrawerList.setAdapter(mDrawerAdapter);
 
@@ -106,8 +111,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext()
-                        , "Dame tu fuerza pegaso!"
+                        , "Click! Pos: " + position + " - ID: " + id
                         , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mDrawerList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext()
+                        , "Long! Pos: " + position + " - ID: " + id
+                        , Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
     }
@@ -132,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (NumberFormatException nfe) {
                     System.out.println("Could not parse " + nfe);
                 }
+
+                //myNum = ProcessData(myNum);
+
                 graphLastXValue += 1d;
                 series.appendData(new DataPoint(graphLastXValue, myNum), true, 40);
             }
@@ -161,7 +179,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+/*
+    double ProcessData(byte[] data)
+    {
+        byte aux = 0;
 
+        aux = (byte)(data[2] << 7);
+        data[3] = (byte)(data[3] | aux);
+        data[2] = (byte)(data[2] >> 1);
+
+        aux = (byte)(data[1] << 6);
+        data[2] = (byte)(data[2] | aux);
+        data[1] = (byte)(data[1] >> 2);
+
+        aux = (byte)(data[0] << 5);
+        data[1] = (byte)(data[1] | aux);
+
+        double dato = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
+
+        return dato;
+    }
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
