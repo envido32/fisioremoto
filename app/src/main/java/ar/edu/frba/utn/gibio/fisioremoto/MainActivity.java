@@ -46,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textRead = (TextView)findViewById(R.id.textRead);
-        etMessage = (EditText)findViewById(R.id.etMessage);
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        textRead = (TextView) findViewById(R.id.textRead);
+        etMessage = (EditText) findViewById(R.id.etMessage);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         graph = (GraphView) findViewById(R.id.graph);
-        series = new LineGraphSeries<>(new DataPoint[] {
+        series = new LineGraphSeries<>(new DataPoint[]{
                 new DataPoint(0, 0),
         });
         graph.addSeries(series);
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("Pacientes");
                 invalidateOptionsMenu();
             }
+
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(mActivityTitle);
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 "Saturno",
                 "Jupiter",
                 "Marte",
-                "Venus" };
+                "Venus"};
         mDrawerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, PatientArray);
         mDrawerList.setAdapter(mDrawerAdapter);
 
@@ -111,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void startBluetooth(){
+    private void startBluetooth() {
 
         bt = new BluetoothSPP(this);
 
-        if(!bt.isBluetoothAvailable()) {
+        if (!bt.isBluetoothAvailable()) {
             Toast.makeText(getApplicationContext()
                     , "Bluetooth is not available"
                     , Toast.LENGTH_SHORT).show();
@@ -170,12 +171,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         int id = item.getItemId();
 
         switch (id) {
             case R.id.menu_device_connect: {
                 bt.setDeviceTarget(BluetoothState.DEVICE_OTHER);
-                if(bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
+                if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
                     bt.disconnect();
                 }
                 Intent intent = new Intent(getApplicationContext(), DeviceList.class);
@@ -202,9 +208,7 @@ public class MainActivity extends AppCompatActivity {
             }
             break;
         }
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -222,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
         } else {
-            if(!bt.isServiceAvailable()) {
+            if (!bt.isServiceAvailable()) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_ANDROID);
                 setupBluetooth();
@@ -231,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupBluetooth() {
-        ImageButton btnSend = (ImageButton)findViewById(R.id.btnSend);
+        ImageButton btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (etMessage.getText().length() != 0) {
@@ -250,15 +254,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case BluetoothState.REQUEST_CONNECT_DEVICE: {
-                if(resultCode == AppCompatActivity.RESULT_OK) {
+                if (resultCode == AppCompatActivity.RESULT_OK) {
                     bt.connect(data);
                 }
-            }break;
+            }
+            break;
 
-            case BluetoothState.REQUEST_ENABLE_BT : {
-                if(resultCode == AppCompatActivity.RESULT_OK) {
+            case BluetoothState.REQUEST_ENABLE_BT: {
+                if (resultCode == AppCompatActivity.RESULT_OK) {
                     bt.setupService();
                     bt.startService(BluetoothState.DEVICE_ANDROID);
                     setupBluetooth();
@@ -268,7 +273,8 @@ public class MainActivity extends AppCompatActivity {
                             , Toast.LENGTH_SHORT).show();
                     finish();
                 }
-            }break;
+            }
+            break;
         }
     }
 }

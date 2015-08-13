@@ -1,85 +1,78 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/title_config_new_person">
 
-           <EditTextPreference
-               android:key="new_name"
-               android:title="Name"
-               android:dialogTitle="Name"
-               android:inputType="textPersonName"
-               android:hint="Juan Carlos Garcia"
-               android:summary="Enter patient name."
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@string/action_positiveButtonText" />
+        <EditTextPreference
+            android:dialogTitle="Name"
+            android:hint="Juan Carlos Garcia"
+            android:inputType="textPersonName"
+            android:key="new_name"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="Name" />
 
-           <EditTextPreference
-               android:key="new_email"
-               android:title="E-Mail"
-               android:dialogTitle="E-Mail"
-               android:inputType="textEmailAddress"
-               android:hint="name@mail.com"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@string/action_positiveButtonText" />
+        <EditTextPreference
+            android:dialogTitle="E-Mail"
+            android:hint="name@mail.com"
+            android:inputType="textEmailAddress"
+            android:key="new_email"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="E-Mail" />
 
-           <ListPreference
-               android:key="new_sex"
-               android:title="Sex"
-               android:entries="@array/list_titles_sex"
-               android:entryValues="@array/list_values_sex"
-               android:defaultValue="0"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@null" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/list_titles_sex"
+            android:entryValues="@array/list_values_sex"
+            android:key="new_sex"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@null"
+            android:title="Sex" />
 
-           <EditTextPreference
-               android:key="new_birthdate"
-               android:title="Birthdate"
-               android:dialogTitle="Birthdate"
-               android:inputType="date"
-               android:hint="31/12/1999"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@string/action_positiveButtonText" />
+        <EditTextPreference
+            android:dialogTitle="Birthdate"
+            android:hint="31/12/1999"
+            android:inputType="date"
+            android:key="new_birthdate"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="Birthdate" />
 
-           <EditTextPreference
-               android:key="new_birth_place"
-               android:title="Birth place"
-               android:dialogTitle="Birth place"
-               android:inputType="textCapWords"
-               android:hint="Argentina"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@string/action_positiveButtonText" />
+        <EditTextPreference
+            android:dialogTitle="Birth place"
+            android:hint="Argentina"
+            android:inputType="textCapWords"
+            android:key="new_birth_place"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="Birth place" />
 
-           <EditTextPreference
-               android:key="new_birth_place2"
-               android:title="Birth provice"
-               android:dialogTitle="Birth provice"
-               android:inputType="textCapWords"
-               android:hint="Santa Fe"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@string/action_positiveButtonText" />
+        <EditTextPreference
+            android:dialogTitle="Birth provice"
+            android:hint="Santa Fe"
+            android:inputType="textCapWords"
+            android:key="new_birth_place2"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="Birth provice" />
 
-           <EditTextPreference
-               android:key="new_birth_city"
-               android:title="Birth city"
-               android:dialogTitle="Birth city"
-               android:inputType="textCapWords"
-               android:hint="Rosario"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@string/action_positiveButtonText" />
+        <EditTextPreference
+            android:dialogTitle="Birth city"
+            android:hint="Rosario"
+            android:inputType="textCapWords"
+            android:key="new_birth_city"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="Birth city" />
 
-           <ListPreference
-               android:key="new_job"
-               android:title="Job"
-               android:entries="@array/list_titles_jobs"
-               android:entryValues="@array/list_values_jobs"
-               android:defaultValue="0"
-               android:summary="%s"
-               android:negativeButtonText="@string/action_negativeButtonText"
-               android:positiveButtonText="@null" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/list_titles_jobs"
+            android:entryValues="@array/list_values_jobs"
+            android:key="new_job"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="Job" />
 
-           </PreferenceCategory>
-       </PreferenceScreen>
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/title_config_sql">
+
+        <EditTextPreference
+            android:dialogTitle="User"
+            android:inputType="text"
+            android:key="sql_user"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="User" />
+
+        <EditTextPreference
+            android:dialogTitle="Password"
+            android:inputType="textPassword"
+            android:key="sql_pass"
+            android:negativeButtonText="@string/action_negativeButtonText"
+            android:positiveButtonText="@string/action_positiveButtonText"
+            android:title="Password" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

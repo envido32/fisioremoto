@@ -24,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.config_sql);
             addPreferencesFromResource(R.xml.config_serial);
             addPreferencesFromResource(R.xml.config_graph);
         }

@@ -1,46 +1,45 @@
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/title_config_com">
 
         <ListPreference
-            android:key="com_bauds"
-            android:title="Bauds"
+            android:defaultValue="9600"
             android:entries="@array/list_values_bauds"
             android:entryValues="@array/list_values_bauds"
-            android:defaultValue="9600"
-            android:summary="%s"
+            android:key="com_bauds"
             android:negativeButtonText="@string/action_negativeButtonText"
-            android:positiveButtonText="@null" />
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="Bauds" />
 
         <ListPreference
-            android:key="com_data_size"
-            android:title="Data size"
+            android:defaultValue="8"
             android:entries="@array/list_values_data_size"
             android:entryValues="@array/list_values_data_size"
-            android:defaultValue="8"
-            android:summary="%s"
+            android:key="com_data_size"
             android:negativeButtonText="@string/action_negativeButtonText"
-            android:positiveButtonText="@null" />
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="Data size" />
 
         <ListPreference
-            android:key="com_parity"
-            android:title="Parity"
+            android:defaultValue="0"
             android:entries="@array/list_titles_parity"
             android:entryValues="@array/list_values_parity"
-            android:defaultValue="0"
-            android:summary="%s"
+            android:key="com_parity"
             android:negativeButtonText="@string/action_negativeButtonText"
-            android:positiveButtonText="@null" />
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="Parity" />
 
         <ListPreference
-            android:key="com_handshake"
-            android:title="Handshake"
+            android:defaultValue="0"
             android:entries="@array/list_titles_handshake"
             android:entryValues="@array/list_values_handshake"
-            android:defaultValue="0"
-            android:summary="%s"
+            android:key="com_handshake"
             android:negativeButtonText="@string/action_negativeButtonText"
-            android:positiveButtonText="@null" />
+            android:positiveButtonText="@null"
+            android:summary="%s"
+            android:title="Handshake" />
 
     </PreferenceCategory>
 </PreferenceScreen>
