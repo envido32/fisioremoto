@@ -22,6 +22,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     LineGraphSeries<DataPoint> series;
     private double graphLastXValue = 1d;
     Menu menu;
+    ArrayList<String> PatientArray;
     private ListView mDrawerList;
     private ArrayAdapter<String> mDrawerAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -59,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
         setupDrawer();
         addDrawerItems();
         startBluetooth();
+
+        PatientArray.add("D");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        Bundle bundle = getIntent().getExtras();
+        String new_profile_name = bundle.getString("stuff");
+        PatientArray.add(new_profile_name);
     }
 
     @Override
@@ -94,15 +107,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addDrawerItems() {
-        String[] PatientArray = {
-                "Neptuno",
-                "Urano",
-                "Saturno",
-                "Jupiter",
-                "Marte",
-                "Venus",
-                "Mercurio"
-        };
+        PatientArray = new ArrayList<>();
+
+        PatientArray.add("A");
+        PatientArray.add("B");
+        PatientArray.add("C");
 
         mDrawerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, PatientArray);
         mDrawerList.setAdapter(mDrawerAdapter);
@@ -113,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext()
                         , "Click! Pos: " + position + " - ID: " + id
                         , Toast.LENGTH_SHORT).show();
+                PatientArray.add("Je");
+                mDrawerAdapter.notifyDataSetChanged();
             }
         });
 
@@ -120,11 +131,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext()
-                        , "Long! Pos: " + position + " - ID: " + id
+                        , "Long! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position) + " - " + PatientArray.get((int) id)
                         , Toast.LENGTH_SHORT).show();
+
+                PatientArray.remove(position);
+                mDrawerAdapter.notifyDataSetChanged();
                 return false;
             }
         });
+
     }
 
     private void startBluetooth() {
