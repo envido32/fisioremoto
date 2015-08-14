@@ -1,21 +1,32 @@
 package ar.edu.frba.utn.gibio.fisioremoto;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class NewPersonActivity extends AppCompatActivity {
     Menu menu;
     String new_profile_name;
 
+    private SharedPreferences prefSettings;
+    private SharedPreferences.Editor prefEditor;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.v("NewPerson", "Opened");
         super.onCreate(savedInstanceState);
+
+        prefSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        prefEditor = prefSettings.edit();
 
         deletePreferences();
 
@@ -26,26 +37,28 @@ public class NewPersonActivity extends AppCompatActivity {
     }
 
     private void deletePreferences() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_name").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_email").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_sex").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_birthdate").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_birth_place").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_birth_place2").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_birth_city").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_job").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_height").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_weight").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_pres_max").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_pres_min").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("new_deltax").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("colesterol").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("presion").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("diabetes").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("artritis").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("rinon").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("fibrilacion").apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().remove("familiar").apply();
+        prefEditor.remove("new_name").apply();
+        prefEditor.remove("new_email").apply();
+        prefEditor.remove("new_sex").apply();
+        prefEditor.remove("new_birthdate").apply();
+        prefEditor.remove("new_birth_place").apply();
+        prefEditor.remove("new_birth_place2").apply();
+        prefEditor.remove("new_birth_city").apply();
+        prefEditor.remove("new_job").apply();
+        prefEditor.remove("new_height").apply();
+        prefEditor.remove("new_weight").apply();
+        prefEditor.remove("new_pres_max").apply();
+        prefEditor.remove("new_pres_min").apply();
+        prefEditor.remove("new_deltax").apply();
+        prefEditor.remove("colesterol").apply();
+        prefEditor.remove("presion").apply();
+        prefEditor.remove("diabetes").apply();
+        prefEditor.remove("artritis").apply();
+        prefEditor.remove("rinon").apply();
+        prefEditor.remove("fibrilacion").apply();
+        prefEditor.remove("familiar");
+        prefEditor.apply();
+        Log.v("NewPerson", "Temp deleted");
     }
 
     public static class NewPersonPreferenceFragment extends PreferenceFragment {
@@ -70,19 +83,21 @@ public class NewPersonActivity extends AppCompatActivity {
 
         switch (id) {
             case android.R.id.home: {
+                Log.v("NewPerson", "Click back");
             }
             break;
 
             case R.id.menu_save: {
-                new_profile_name = PreferenceManager.getDefaultSharedPreferences(this).getString("new_name", "No Name");
-                Toast.makeText(getApplicationContext()
-                        , "New profile created: " + new_profile_name
-                        , Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("stuff", new_profile_name);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                Log.v("NewPerson", "Click save");
+                Set<String> pacientesSet = new HashSet<>();
+                pacientesSet = prefSettings.getStringSet("saved_name", null);
+                if (pacientesSet != null) {
+                    new_profile_name = prefSettings.getString("new_name", "No Name");
+                    pacientesSet.add(new_profile_name);
+                    prefEditor.putStringSet("saved_name", pacientesSet).apply();
+                    Toast.makeText(getApplicationContext(), "Saved: " + new_profile_name, Toast.LENGTH_SHORT).show();
+                    Log.i("NewPerson", "Saved: " + new_profile_name);
+                }
             }
             break;
         }

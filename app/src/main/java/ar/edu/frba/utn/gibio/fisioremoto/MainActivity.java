@@ -2,11 +2,14 @@ package ar.edu.frba.utn.gibio.fisioremoto;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +26,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -44,8 +49,19 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
 
+    private SharedPreferences prefSettings;
+    private SharedPreferences.Editor prefEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Log.wtf("Init", "WFT log visible");
+        Log.d("Init", "DEBUG log visible");
+        Log.e("Init", "ERROR log visible");
+        Log.i("Init", "INFO log visible");
+        Log.v("Init", "VERBOSE log visible");
+        Log.w("Init", "WARNING log visible");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -59,19 +75,31 @@ public class MainActivity extends AppCompatActivity {
         });
         graph.addSeries(series);
 
+        prefSettings = PreferenceManager.getDefaultSharedPreferences(this);
+        prefEditor = prefSettings.edit();
+
         setupDrawer();
         addDrawerItems();
         startBluetooth();
-
-        PatientArray.add("D");
+        Log.v("Init", "Init finished");
     }
 
+
     @Override
-    protected void onNewIntent(Intent intent){
-        super.onNewIntent(intent);
-        Bundle bundle = getIntent().getExtras();
-        String new_profile_name = bundle.getString("stuff");
-        PatientArray.add(new_profile_name);
+    protected void onResume() {
+        super.onResume();
+        Set<String> pacientesSet = new HashSet<>();
+        pacientesSet = prefSettings.getStringSet("saved_name", null);
+        if (pacientesSet != null) {
+            PatientArray.clear();
+            PatientArray.addAll(pacientesSet);
+            Log.v("onResume", "pacientesSet: " + pacientesSet);
+            mDrawerAdapter.notifyDataSetChanged();
+        }
+        else{
+            Log.i("onResume", "pasientesSet is NULL");
+        }
+
     }
 
     @Override
@@ -109,31 +137,20 @@ public class MainActivity extends AppCompatActivity {
     private void addDrawerItems() {
         PatientArray = new ArrayList<>();
 
-        PatientArray.add("A");
-        PatientArray.add("B");
-        PatientArray.add("C");
-
         mDrawerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, PatientArray);
         mDrawerList.setAdapter(mDrawerAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext()
-                        , "Click! Pos: " + position + " - ID: " + id
-                        , Toast.LENGTH_SHORT).show();
-                PatientArray.add("Je");
-                mDrawerAdapter.notifyDataSetChanged();
+                Log.v("Drawer", "Click! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position));
             }
         });
 
         mDrawerList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext()
-                        , "Long! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position) + " - " + PatientArray.get((int) id)
-                        , Toast.LENGTH_SHORT).show();
-
+                Log.v("Drawer", "Long! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position));
                 PatientArray.remove(position);
                 mDrawerAdapter.notifyDataSetChanged();
                 return false;
@@ -147,9 +164,8 @@ public class MainActivity extends AppCompatActivity {
         bt = new BluetoothSPP(this);
 
         if (!bt.isBluetoothAvailable()) {
-            Toast.makeText(getApplicationContext()
-                    , "Bluetooth is not available"
-                    , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Bluetooth is not available", Toast.LENGTH_SHORT).show();
+            Log.e("Bluetooth", "Not avaliable");
             finish();
         }
 
@@ -161,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     myNum = Integer.parseInt(message);
                 } catch (NumberFormatException nfe) {
                     System.out.println("Could not parse " + nfe);
+                    Log.e("Bluetooth", "Could not parse " + nfe);
                 }
 
                 //myNum = ProcessData(myNum);
@@ -172,53 +189,52 @@ public class MainActivity extends AppCompatActivity {
 
         bt.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             public void onDeviceDisconnected() {
-                Toast.makeText(getApplicationContext()
-                        , "Disconnected!"
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Disconnected!", Toast.LENGTH_SHORT).show();
+                Log.i("Bluetooth", "Disconnected!");
                 menu.clear();
                 getMenuInflater().inflate(R.menu.menu_connection, menu);
             }
 
             public void onDeviceConnectionFailed() {
-                Toast.makeText(getApplicationContext()
-                        , "Connection failed!"
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Connection failed!", Toast.LENGTH_SHORT).show();
+                Log.i("Bluetooth", "Connection failed!");
             }
 
             public void onDeviceConnected(String name, String address) {
-                Toast.makeText(getApplicationContext()
-                        , "Connected to " + name
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Connected to " + name, Toast.LENGTH_SHORT).show();
+                Log.i("Bluetooth", "Connected to " + name);
                 menu.clear();
                 getMenuInflater().inflate(R.menu.menu_disconnection, menu);
             }
         });
     }
-/*
-    double ProcessData(byte[] data)
-    {
-        byte aux = 0;
 
-        aux = (byte)(data[2] << 7);
-        data[3] = (byte)(data[3] | aux);
-        data[2] = (byte)(data[2] >> 1);
+    /*
+        double ProcessData(byte[] data)
+        {
+            byte aux = 0;
 
-        aux = (byte)(data[1] << 6);
-        data[2] = (byte)(data[2] | aux);
-        data[1] = (byte)(data[1] >> 2);
+            aux = (byte)(data[2] << 7);
+            data[3] = (byte)(data[3] | aux);
+            data[2] = (byte)(data[2] >> 1);
 
-        aux = (byte)(data[0] << 5);
-        data[1] = (byte)(data[1] | aux);
+            aux = (byte)(data[1] << 6);
+            data[2] = (byte)(data[2] | aux);
+            data[1] = (byte)(data[1] >> 2);
 
-        double dato = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
+            aux = (byte)(data[0] << 5);
+            data[1] = (byte)(data[1] | aux);
 
-        return dato;
-    }
-*/
+            double dato = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
+
+            return dato;
+        }
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_connection, menu);
+        Log.v("OptionsMenu", "Created");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -270,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         bt.stopService();
+        Log.v("Main", "Closed");
     }
 
     @Override
@@ -294,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
                 if (etMessage.getText().length() != 0) {
                     bt.send(etMessage.getText().toString(), true);
                     etMessage.setText("");
+                    Log.v("Bluetooth", "Send: " + etMessage.getText().toString());
                 }
             }
         });
@@ -321,9 +339,8 @@ public class MainActivity extends AppCompatActivity {
                     bt.startService(BluetoothState.DEVICE_ANDROID);
                     setupBluetooth();
                 } else {
-                    Toast.makeText(getApplicationContext()
-                            , "Bluetooth was not enabled."
-                            , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Bluetooth was not enabled.", Toast.LENGTH_SHORT).show();
+                    Log.e("Bluetooth", "Was not enabled");
                     finish();
                 }
             }
