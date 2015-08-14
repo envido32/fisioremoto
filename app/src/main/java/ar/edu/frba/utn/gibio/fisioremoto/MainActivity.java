@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefSettings;
     private SharedPreferences.Editor prefEditor;
+    Set<String> pacientesSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         prefSettings = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = prefSettings.edit();
+        pacientesSet = new HashSet<>();
 
         setupDrawer();
         addDrawerItems();
@@ -88,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Set<String> pacientesSet = new HashSet<>();
         pacientesSet = prefSettings.getStringSet("saved_name", null);
         if (pacientesSet != null) {
             PatientArray.clear();
@@ -99,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         else{
             Log.i("onResume", "pasientesSet is NULL");
         }
-
     }
 
     @Override
@@ -151,8 +151,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("Drawer", "Long! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position));
+                pacientesSet = prefSettings.getStringSet("saved_name", null);
+                pacientesSet.remove(PatientArray.get(position));
+                prefEditor.putStringSet("saved_name", pacientesSet).apply();
                 PatientArray.remove(position);
                 mDrawerAdapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Deleted: " + PatientArray.get(position), Toast.LENGTH_SHORT).show();
+                Log.i("Drawer", "Deleted: " + PatientArray.get(position));
                 return false;
             }
         });

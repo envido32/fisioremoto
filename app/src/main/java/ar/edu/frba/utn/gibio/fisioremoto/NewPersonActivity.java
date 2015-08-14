@@ -37,25 +37,25 @@ public class NewPersonActivity extends AppCompatActivity {
     }
 
     private void deletePreferences() {
-        prefEditor.remove("new_name").apply();
-        prefEditor.remove("new_email").apply();
-        prefEditor.remove("new_sex").apply();
-        prefEditor.remove("new_birthdate").apply();
-        prefEditor.remove("new_birth_place").apply();
-        prefEditor.remove("new_birth_place2").apply();
-        prefEditor.remove("new_birth_city").apply();
-        prefEditor.remove("new_job").apply();
-        prefEditor.remove("new_height").apply();
-        prefEditor.remove("new_weight").apply();
-        prefEditor.remove("new_pres_max").apply();
-        prefEditor.remove("new_pres_min").apply();
-        prefEditor.remove("new_deltax").apply();
-        prefEditor.remove("colesterol").apply();
-        prefEditor.remove("presion").apply();
-        prefEditor.remove("diabetes").apply();
-        prefEditor.remove("artritis").apply();
-        prefEditor.remove("rinon").apply();
-        prefEditor.remove("fibrilacion").apply();
+        prefEditor.remove("new_name");
+        prefEditor.remove("new_email");
+        prefEditor.remove("new_sex");
+        prefEditor.remove("new_birthdate");
+        prefEditor.remove("new_birth_place");
+        prefEditor.remove("new_birth_place2");
+        prefEditor.remove("new_birth_city");
+        prefEditor.remove("new_job");
+        prefEditor.remove("new_height");
+        prefEditor.remove("new_weight");
+        prefEditor.remove("new_pres_max");
+        prefEditor.remove("new_pres_min");
+        prefEditor.remove("new_deltax");
+        prefEditor.remove("colesterol");
+        prefEditor.remove("presion");
+        prefEditor.remove("diabetes");
+        prefEditor.remove("artritis");
+        prefEditor.remove("rinon");
+        prefEditor.remove("fibrilacion");
         prefEditor.remove("familiar");
         prefEditor.apply();
         Log.v("NewPerson", "Temp deleted");
@@ -89,14 +89,16 @@ public class NewPersonActivity extends AppCompatActivity {
 
             case R.id.menu_save: {
                 Log.v("NewPerson", "Click save");
+                new_profile_name = prefSettings.getString("new_name", "No Name");
                 Set<String> pacientesSet = new HashSet<>();
                 pacientesSet = prefSettings.getStringSet("saved_name", null);
                 if (pacientesSet != null) {
-                    new_profile_name = prefSettings.getString("new_name", "No Name");
                     pacientesSet.add(new_profile_name);
                     prefEditor.putStringSet("saved_name", pacientesSet).apply();
                     Toast.makeText(getApplicationContext(), "Saved: " + new_profile_name, Toast.LENGTH_SHORT).show();
                     Log.i("NewPerson", "Saved: " + new_profile_name);
+                } else {
+                    Log.e("NewPerson", "pacientesSet Null");
                 }
             }
             break;
