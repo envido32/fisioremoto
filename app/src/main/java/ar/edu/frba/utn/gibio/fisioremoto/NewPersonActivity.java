@@ -90,16 +90,17 @@ public class NewPersonActivity extends AppCompatActivity {
             case R.id.menu_save: {
                 Log.v("NewPerson", "Click save");
                 new_profile_name = prefSettings.getString("new_name", "No Name");
-                Set<String> pacientesSet = new HashSet<>();
-                pacientesSet = prefSettings.getStringSet("saved_name", null);
-                if (pacientesSet != null) {
-                    pacientesSet.add(new_profile_name);
-                    prefEditor.putStringSet("saved_name", pacientesSet).apply();
-                    Toast.makeText(getApplicationContext(), "Saved: " + new_profile_name, Toast.LENGTH_SHORT).show();
+                Set<String> pacientesSet = prefSettings.getStringSet("saved_name", null);
+                if (pacientesSet == null) {
+                    pacientesSet = new HashSet<>();
                     Log.i("NewPerson", "Saved: " + new_profile_name);
                 } else {
                     Log.e("NewPerson", "pacientesSet Null");
                 }
+                pacientesSet.add(new_profile_name);
+                prefEditor.putStringSet("saved_name", pacientesSet).apply();
+                Toast.makeText(getApplicationContext(), "Saved: " + new_profile_name, Toast.LENGTH_SHORT).show();
+
             }
             break;
         }

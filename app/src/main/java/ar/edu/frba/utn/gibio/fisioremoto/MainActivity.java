@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "Click! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position), Toast.LENGTH_SHORT).show();
                 Log.v("Drawer", "Click! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position));
             }
         });
@@ -152,12 +153,17 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("Drawer", "Long! Pos: " + position + " - ID: " + id + " - " + PatientArray.get(position));
                 pacientesSet = prefSettings.getStringSet("saved_name", null);
-                pacientesSet.remove(PatientArray.get(position));
-                prefEditor.putStringSet("saved_name", pacientesSet).apply();
+                if (pacientesSet == null) {
+                    Log.e("NewPerson", "pacientesSet Null");
+                    pacientesSet = new HashSet<>();
+                } else {
+                    Log.i("NewPerson", "pacientesSet not Null");
+                    pacientesSet.remove(PatientArray.get(position));
+                    prefEditor.putStringSet("saved_name", pacientesSet).apply();
+                }
                 PatientArray.remove(position);
                 mDrawerAdapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), "Deleted: " + PatientArray.get(position), Toast.LENGTH_SHORT).show();
-                Log.i("Drawer", "Deleted: " + PatientArray.get(position));
                 return false;
             }
         });
