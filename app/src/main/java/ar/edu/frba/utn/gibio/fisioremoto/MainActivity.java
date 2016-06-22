@@ -192,6 +192,20 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //myNum = ProcessData(myNum);
+                    byte aux = 0;
+
+                    aux = (byte)(data[2] << 7);
+                    data[3] = (byte)(data[3] | aux);
+                    data[2] = (byte)(data[2] >> 1);
+
+                    aux = (byte)(data[1] << 6);
+                    data[2] = (byte)(data[2] | aux);
+                    data[1] = (byte)(data[1] >> 2);
+
+                    aux = (byte)(data[0] << 5);
+                    data[1] = (byte)(data[1] | aux);
+
+                    myNum = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
 
                 graphLastXValue += 1d;
                 series.appendData(new DataPoint(graphLastXValue, myNum), true, 40);
