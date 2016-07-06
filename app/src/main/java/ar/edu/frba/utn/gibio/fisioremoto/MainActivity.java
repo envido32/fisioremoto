@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("Bluetooth", "Could not parse " + nfe);
                 }
 
-                //myNum = ProcessData(myNum);
+                /*myNum = ProcessData(myNum);
                     byte aux = 0;
 
                     aux = (byte)(data[2] << 7);
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                     data[1] = (byte)(data[1] | aux);
 
                     myNum = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
-
+*/
                 graphLastXValue += 1d;
                 series.appendData(new DataPoint(graphLastXValue, myNum), true, 40);
             }
