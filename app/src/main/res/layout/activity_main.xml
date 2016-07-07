@@ -21,14 +21,22 @@
         <com.jjoe64.graphview.GraphView
             android:layout_width="match_parent"
             android:layout_height="200dip"
-            android:id="@+id/graph"
+            android:id="@+id/graphA"
             android:layout_alignParentTop="true" />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:id="@+id/graphB"
+            android:layout_below="@+id/graphA"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="match_parent"
+            android:layout_below="@+id/graphB"
             android:layout_above="@+id/layout1"
-            android:layout_below="@+id/graph"
             android:layout_alignParentTop="false"
             android:layout_height="wrap_content">
 

@@ -38,9 +38,16 @@ public class MainActivity extends AppCompatActivity {
     BluetoothSPP bt;
     TextView textRead;
     EditText etMessage;
-    GraphView graph;
-    LineGraphSeries<DataPoint> series;
-    private double graphLastXValue = 1d;
+
+    GraphView graphA;
+    LineGraphSeries<DataPoint> seriesA;
+    private double graphALastXValue = 1d;
+
+    GraphView graphB;
+    LineGraphSeries<DataPoint> seriesB;
+    private double graphBLastXValue = 1d;
+
+
     Menu menu;
     ArrayList<String> PatientArray;
     private ListView mDrawerList;
@@ -70,11 +77,24 @@ public class MainActivity extends AppCompatActivity {
         etMessage = (EditText) findViewById(R.id.etMessage);
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        graph = (GraphView) findViewById(R.id.graph);
-        series = new LineGraphSeries<>(new DataPoint[]{
+
+
+        graphA = (GraphView) findViewById(R.id.graphA);
+        seriesA = new LineGraphSeries<>(new DataPoint[]{
                 new DataPoint(0, 0),
         });
-        graph.addSeries(series);
+        graphA.addSeries(seriesA);
+        graphA.getViewport().setScrollable(true);      // enable scrolling
+        graphA.getViewport().setScalable(true);        // enable scaling
+
+        graphB = (GraphView) findViewById(R.id.graphB);
+        seriesB = new LineGraphSeries<>(new DataPoint[]{
+                new DataPoint(0, 0),
+        });
+        graphB.addSeries(seriesB);
+
+        graphB.getViewport().setScrollable(true);      // enable scrolling
+        graphB.getViewport().setScalable(true);        // enable scaling
 
         prefSettings = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = prefSettings.edit();
@@ -170,6 +190,71 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Transformar en tarea
+    private void graphApp (String message){
+        int datos_canal[] = {0,0,0,0};
+        int aux = 0;
+        int dato_final = 0;
+        int myNumA = 0;
+        int myNumB = 0;
+
+        if (message.length() > 3) {
+            try {
+                myNumA = message.charAt(0);
+                myNumB = message.charAt(1);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+                Log.e("Bluetooth", "Could not parse " + nfe);
+            }
+
+            aux  = message.charAt(0) & 0x80 ;
+            if (aux == 0x80) {
+                datos_canal[0] = message.charAt(0) & 0x07;
+            }
+            aux  = message.charAt(1) & 0x80 ;
+            if (aux == 0x00) {
+                datos_canal[1] = message.charAt(1) & 0x7F;
+            }
+            aux  = message.charAt(1) & 0x80 ;
+            if (aux == 0x00) {
+                datos_canal[2] = message.charAt(2) & 0x7F;
+            }
+            aux  = message.charAt(1) & 0x80 ;
+            if (aux == 0x00) {
+                datos_canal[3] = message.charAt(3) & 0x7F;
+            }
+
+            dato_final = datos_canal[3]
+                    + (datos_canal[2] << 8)
+                    + (datos_canal[1] << 16)
+                    + (datos_canal[0] << 24);
+
+            Toast.makeText(getApplicationContext(), "dato_final: " + dato_final, Toast.LENGTH_SHORT).show();
+
+            aux = message.charAt(0) & 0x38;
+            aux >>= 4;
+
+            switch (aux) {
+                case 0: {
+                    graphALastXValue += 1d;
+                    seriesA.appendData(new DataPoint(graphALastXValue, dato_final), true, 40);
+                } break;
+
+                case 2: {
+                    graphBLastXValue += 1d;
+                    seriesB.appendData(new DataPoint(graphBLastXValue, dato_final), true, 40);
+                }break;
+
+                default: {
+                }
+            }
+        }
+        else{
+
+            Toast.makeText(getApplicationContext(), "messege too short!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void startBluetooth() {
 
         bt = new BluetoothSPP(this);
@@ -183,32 +268,7 @@ public class MainActivity extends AppCompatActivity {
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
                 textRead.append(message + "\n");
-                int myNum = 0;
-                try {
-                    myNum = Integer.parseInt(message);
-                } catch (NumberFormatException nfe) {
-                    System.out.println("Could not parse " + nfe);
-                    Log.e("Bluetooth", "Could not parse " + nfe);
-                }
-
-                /*myNum = ProcessData(myNum);
-                    byte aux = 0;
-
-                    aux = (byte)(data[2] << 7);
-                    data[3] = (byte)(data[3] | aux);
-                    data[2] = (byte)(data[2] >> 1);
-
-                    aux = (byte)(data[1] << 6);
-                    data[2] = (byte)(data[2] | aux);
-                    data[1] = (byte)(data[1] >> 2);
-
-                    aux = (byte)(data[0] << 5);
-                    data[1] = (byte)(data[1] | aux);
-
-                    myNum = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
-*/
-                graphLastXValue += 1d;
-                series.appendData(new DataPoint(graphLastXValue, myNum), true, 40);
+                graphApp(message);
             }
         });
 
@@ -234,27 +294,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
-        double ProcessData(byte[] data)
-        {
-            byte aux = 0;
-
-            aux = (byte)(data[2] << 7);
-            data[3] = (byte)(data[3] | aux);
-            data[2] = (byte)(data[2] >> 1);
-
-            aux = (byte)(data[1] << 6);
-            data[2] = (byte)(data[2] | aux);
-            data[1] = (byte)(data[1] >> 2);
-
-            aux = (byte)(data[0] << 5);
-            data[1] = (byte)(data[1] | aux);
-
-            double dato = (int)(data[1] << 16) + (int)(data[2] << 8) + (int)(data[3]);
-
-            return dato;
-        }
-    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;

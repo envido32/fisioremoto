@@ -28,5 +28,5 @@ dependencies {
     // GraphView library
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     // Bluetooth SPP library
-    compile 'com.android.support:support-v13:24.0.0'
+    compile 'com.android.support:support-v13:22.0.0'
 }
