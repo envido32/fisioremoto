@@ -207,50 +207,80 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Bluetooth", "Could not parse " + nfe);
             }
 
-            aux  = message.charAt(0) & 0x80 ;
-            if (aux == 0x80) {
-                datos_canal[0] = message.charAt(0) & 0x07;
-            }
-            aux  = message.charAt(1) & 0x80 ;
-            if (aux == 0x00) {
-                datos_canal[1] = message.charAt(1) & 0x7F;
-            }
-            aux  = message.charAt(1) & 0x80 ;
-            if (aux == 0x00) {
-                datos_canal[2] = message.charAt(2) & 0x7F;
-            }
-            aux  = message.charAt(1) & 0x80 ;
-            if (aux == 0x00) {
-                datos_canal[3] = message.charAt(3) & 0x7F;
-            }
+            /* bits del DATO;
+
+            sdptool records 5C:51:88:2C:2B:CF
+            sudo gedit /etc/bluetooth/rfcomm.conf
+                	rfcomm0 {
+                        bind no;
+                        device 5c:51:88:2c:2b:cf;
+                        channel 8;
+                        comment "SPP";
+                        }
+            sudo rfcomm connect 0
+            sudo cutecom
+
+            1 0     CH2   CH1     CH0   bit23 bit22 bit21
+            0 bit20 bit19 bit18   bit17 bit16 bit15 bit14
+            0 bit13 bit12 bit11   bit10 bit09 bit08 bit07
+            0 bit06 bit05 bit04   bit03 bit02 bit01 bit00
+            */
+            datos_canal[0] = message.charAt(0);
+            datos_canal[0] &= 0x07;  // 0000 0111
+            datos_canal[1] = message.charAt(1);
+            datos_canal[1] &= 0x7F;  // 0111 1111
+            datos_canal[2] = message.charAt(2);
+            datos_canal[2] &= 0x7F;
+            datos_canal[3] = message.charAt(3);
+            datos_canal[3] &= 0x7F;
 
             dato_final = datos_canal[3]
-                    + (datos_canal[2] << 8)
-                    + (datos_canal[1] << 16)
-                    + (datos_canal[0] << 24);
-
+                    + (datos_canal[2] << 7)
+                    + (datos_canal[1] << 14)
+                    + (datos_canal[0] << 21);
             Toast.makeText(getApplicationContext(), "dato_final: " + dato_final, Toast.LENGTH_SHORT).show();
 
-            aux = message.charAt(0) & 0x38;
-            aux >>= 4;
+            aux  = message.charAt(0);
+            aux &= 0xC0 ;               // 1100 0000
+            if (aux == 0x80) {
+                aux  = message.charAt(1) & 0x80 ;           // 1000 0000
+                if (aux == 0x00) {
+                    aux  = message.charAt(2) & 0x80 ;
+                    if (aux == 0x00) {
+                        aux  = message.charAt(3) & 0x80 ;
+                        if (aux == 0x00) {
+                            aux = message.charAt(0) & 0x38;     // 0011 1000
+                            aux >>= 3;
 
-            switch (aux) {
-                case 0: {
-                    graphALastXValue += 1d;
-                    seriesA.appendData(new DataPoint(graphALastXValue, dato_final), true, 40);
-                } break;
+                            switch (aux) {
+                                case 1: {
+                                    graphALastXValue += 1d;
+                                    seriesA.appendData(new DataPoint(graphALastXValue, dato_final), true, 40);
+                                } break;
 
-                case 2: {
-                    graphBLastXValue += 1d;
-                    seriesB.appendData(new DataPoint(graphBLastXValue, dato_final), true, 40);
-                }break;
+                                case 2: {
+                                    graphBLastXValue += 1d;
+                                    seriesB.appendData(new DataPoint(graphBLastXValue, dato_final), true, 40);
+                                }break;
 
-                default: {
+                                default: {
+                                    Toast.makeText(getApplicationContext(), "Canal invalido! " + aux, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Mala Trama! (3) " + aux, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Mala Trama! (2) " + aux, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Mala Trama! (1) " + aux, Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), "Mala Trama! (0) " + aux, Toast.LENGTH_SHORT).show();
             }
         }
         else{
-
             Toast.makeText(getApplicationContext(), "messege too short!", Toast.LENGTH_SHORT).show();
         }
     }
