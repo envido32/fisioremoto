@@ -235,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
             datos_canal[3] &= 0x7F;
 
             dato_final = datos_canal[3]
-                    + (datos_canal[2] << 7)
-                    + (datos_canal[1] << 14)
-                    + (datos_canal[0] << 21);
+                ^ (datos_canal[2] << 7)
+                ^ (datos_canal[1] << 14)
+                ^ (datos_canal[0] << 21);
             Toast.makeText(getApplicationContext(), "dato_final: " + dato_final, Toast.LENGTH_SHORT).show();
 
             aux  = message.charAt(0);
