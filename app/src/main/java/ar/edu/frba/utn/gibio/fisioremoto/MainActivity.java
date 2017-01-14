@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -86,6 +87,25 @@ public class MainActivity extends AppCompatActivity {
         graphA.addSeries(seriesA);
         graphA.getViewport().setScrollable(true);      // enable scrolling
         graphA.getViewport().setScalable(true);        // enable scaling
+        // set manual Y bounds
+        graphA.getViewport().setYAxisBoundsManual(true);
+        graphA.getViewport().setMinY(-9000000);
+        graphA.getViewport().setMaxY(9000000);
+        // titles
+        graphA.setTitle("Electrocardiograma");
+        graphA.getGridLabelRenderer().setVerticalAxisTitle("Tension [mV]");
+        graphA.getGridLabelRenderer().setHorizontalAxisTitle("Tiempo [ms]");
+        // custom label formatter
+        graphA.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) { // X axis
+                    return super.formatLabel(value, isValueX) + " ms";
+                } else {    // Y axis
+                    return super.formatLabel(value/1000000, isValueX);
+                }
+            }
+        });
 
         graphB = (GraphView) findViewById(R.id.graphB);
         seriesB = new LineGraphSeries<>(new DataPoint[]{
@@ -95,6 +115,25 @@ public class MainActivity extends AppCompatActivity {
 
         graphB.getViewport().setScrollable(true);      // enable scrolling
         graphB.getViewport().setScalable(true);        // enable scaling
+        // set manual Y bounds
+        graphB.getViewport().setYAxisBoundsManual(true);
+        graphB.getViewport().setMinY(-9000000);
+        graphB.getViewport().setMaxY(9000000);
+        // titles
+        graphB.setTitle("Presion Cardiaca");
+        graphB.getGridLabelRenderer().setVerticalAxisTitle("Presion [mmHg]");
+        graphB.getGridLabelRenderer().setHorizontalAxisTitle("Tiempo [ms]");
+        // custom label formatter
+        graphB.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) { // X axis
+                    return super.formatLabel(value, isValueX) + " ms";
+                } else {    // Y axis
+                    return super.formatLabel(value/1000000, isValueX);
+                }
+            }
+        });
 
         prefSettings = PreferenceManager.getDefaultSharedPreferences(this);
         prefEditor = prefSettings.edit();
@@ -392,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (!bt.isServiceAvailable()) {
                 bt.setupService();
-                bt.startService(BluetoothState.DEVICE_ANDROID);
+                bt.startService(BluetoothState.DEVICE_OTHER);
                 setupBluetooth();
             }
         }
@@ -430,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
             case BluetoothState.REQUEST_ENABLE_BT: {
                 if (resultCode == AppCompatActivity.RESULT_OK) {
                     bt.setupService();
-                    bt.startService(BluetoothState.DEVICE_ANDROID);
+                    bt.startService(BluetoothState.DEVICE_OTHER);
                     setupBluetooth();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bluetooth was not enabled.", Toast.LENGTH_SHORT).show();
